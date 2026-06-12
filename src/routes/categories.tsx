@@ -110,6 +110,11 @@ function CategoriesPage() {
         <div className="flex items-center justify-center p-8">
           <Loader className="h-6 w-6 animate-spin text-cocoa-soft" />
         </div>
+      ) : list.length === 0 ? (
+        <div className="text-center py-12 text-muted-foreground">
+          <p>ไม่พบหมวดหมู่ในฐานข้อมูล</p>
+          <p className="text-xs mt-2">โปรดเพิ่มหมวดหมู่ใน Supabase Dashboard</p>
+        </div>
       ) : (
         <ul className="space-y-3">
           {list.map((c) => {
