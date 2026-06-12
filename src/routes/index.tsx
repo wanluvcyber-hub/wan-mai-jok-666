@@ -24,26 +24,45 @@ function Dashboard() {
   const { transactions, categories, loading, addTransaction } = useTransactions();
   const [dialogOpen, setDialogOpen] = useState(false);
 
+  // Date selection state
+  const now = new Date();
+  const [selectedMonth, setSelectedMonth] = useState(now.getMonth());
+  const [selectedYear, setSelectedYear] = useState(now.getFullYear());
+
+  const monthNames = [
+    "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.",
+    "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
+  ];
+
+  const years = [2024, 2025, 2026];
+
   const handleAddTransaction = async (txn: any) => {
     await addTransaction(txn);
   };
 
+  const filteredTransactions = useMemo(() => {
+    return transactions.filter(t => {
+      const d = new Date(t.date);
+      return d.getMonth() === selectedMonth && d.getFullYear() === selectedYear;
+    });
+  }, [transactions, selectedMonth, selectedYear]);
+
   // Calculate income, expense, balance
-  const income = useMemo(() => transactions.filter((t) => t.amount > 0).reduce((s, t) => s + t.amount, 0), [transactions]);
-  const expense = useMemo(() => transactions.filter((t) => t.amount < 0).reduce((s, t) => s + Math.abs(t.amount), 0), [transactions]);
+  const income = useMemo(() => filteredTransactions.filter((t) => t.amount > 0).reduce((s, t) => s + t.amount, 0), [filteredTransactions]);
+  const expense = useMemo(() => filteredTransactions.filter((t) => t.amount < 0).reduce((s, t) => s + Math.abs(t.amount), 0), [filteredTransactions]);
   const balance = useMemo(() => income - expense, [income, expense]);
 
   // Calculate expense by category
   const categorySpent = useMemo(() => {
     const map = new Map<string, number>();
-    transactions.forEach((t) => {
+    filteredTransactions.forEach((t) => {
       if (t.amount < 0) {
         const current = map.get(t.category_name) || 0;
         map.set(t.category_name, current + Math.abs(t.amount));
       }
     });
     return map;
-  }, [transactions]);
+  }, [filteredTransactions]);
 
   // top expense categories for donut
   const expenseCats = useMemo(() => {
@@ -99,10 +118,27 @@ function Dashboard() {
       <section className="paper-card p-5">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="font-display text-3xl font-bold text-cocoa">สรุป</h2>
-          <button className="flex items-center gap-1 text-sm text-muted-foreground">
-            1 มิ.ย. – 30 มิ.ย. 2569
+          <div className="flex items-center gap-1 text-sm text-muted-foreground">
+            <select 
+              value={selectedMonth} 
+              onChange={(e) => setSelectedMonth(Number(e.target.value))}
+              className="bg-transparent focus:outline-none cursor-pointer hover:text-primary transition-colors"
+            >
+              {monthNames.map((name, i) => (
+                <option key={name} value={i}>{name}</option>
+              ))}
+            </select>
+            <select 
+              value={selectedYear} 
+              onChange={(e) => setSelectedYear(Number(e.target.value))}
+              className="bg-transparent focus:outline-none cursor-pointer hover:text-primary transition-colors"
+            >
+              {years.map(y => (
+                <option key={y} value={y}>{y + 543}</option>
+              ))}
+            </select>
             <ChevronDown className="h-4 w-4" />
-          </button>
+          </div>
         </div>
 
         {/* Balance pill */}
@@ -165,7 +201,7 @@ function Dashboard() {
             </li>
             <li className="flex items-center justify-between">
               <span className="text-muted-foreground">จำนวนรายการ</span>
-              <span className="font-semibold text-cocoa">{transactions.length}</span>
+              <span className="font-semibold text-cocoa">{filteredTransactions.length}</span>
             </li>
             <li className="flex items-center justify-between">
               <span className="text-muted-foreground">งบที่ตั้งไว้</span>
