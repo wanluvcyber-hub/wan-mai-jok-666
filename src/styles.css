@@ -1,0 +1,132 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-mint: var(--mint);
+  --color-mint-foreground: var(--mint-foreground);
+  --color-mint-soft: var(--mint-soft);
+  --color-pink-soft: var(--pink-soft);
+  --color-cream: var(--cream);
+  --color-cocoa: var(--cocoa);
+
+  --font-display: "Mali", "IBM Plex Sans Thai", system-ui, sans-serif;
+  --font-sans: "IBM Plex Sans Thai", "IBM Plex Sans", system-ui, sans-serif;
+
+  --shadow-soft: 0 4px 18px -6px rgba(120, 60, 80, 0.12);
+  --shadow-pop: 0 10px 30px -12px rgba(233, 30, 99, 0.35);
+}
+
+:root {
+  --radius: 1.1rem;
+
+  /* Warm cream paper background from wanjot artwork */
+  --background: oklch(0.975 0.018 70);
+  --foreground: oklch(0.30 0.05 30);
+
+  --card: oklch(0.995 0.01 80);
+  --card-foreground: oklch(0.30 0.05 30);
+
+  --popover: oklch(0.995 0.01 80);
+  --popover-foreground: oklch(0.30 0.05 30);
+
+  /* Parnuan pink */
+  --primary: oklch(0.64 0.21 358);
+  --primary-foreground: oklch(0.99 0.005 0);
+
+  --secondary: oklch(0.94 0.025 60);
+  --secondary-foreground: oklch(0.30 0.05 30);
+
+  --muted: oklch(0.93 0.02 65);
+  --muted-foreground: oklch(0.52 0.04 40);
+
+  --accent: oklch(0.92 0.045 20);
+  --accent-foreground: oklch(0.35 0.10 20);
+
+  --destructive: oklch(0.60 0.24 25);
+  --destructive-foreground: oklch(0.99 0.005 0);
+
+  --border: oklch(0.90 0.025 60);
+  --input: oklch(0.90 0.025 60);
+  --ring: oklch(0.64 0.21 358);
+
+  /* Custom semantic tokens */
+  --mint: oklch(0.78 0.10 175);
+  --mint-foreground: oklch(0.35 0.08 175);
+  --mint-soft: oklch(0.93 0.045 175);
+  --pink-soft: oklch(0.94 0.035 358);
+  --cream: oklch(0.97 0.025 75);
+  --cocoa: oklch(0.32 0.06 40);
+}
+
+.theme-blue {
+  --primary: oklch(0.6 0.18 250);
+  --ring: oklch(0.6 0.18 250);
+}
+
+.theme-green {
+  --primary: oklch(0.6 0.18 150);
+  --ring: oklch(0.6 0.18 150);
+}
+
+.theme-orange {
+  --primary: oklch(0.65 0.22 45);
+  --ring: oklch(0.65 0.22 45);
+}
+
+.theme-purple {
+  --primary: oklch(0.6 0.2 300);
+  --ring: oklch(0.6 0.2 300);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html, body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, .font-display {
+    font-family: var(--font-display);
+    letter-spacing: 0.005em;
+  }
+}
+
+@utility paper-card {
+  background: var(--color-card);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid color-mix(in oklab, var(--color-border) 60%, transparent);
+}
